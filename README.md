@@ -1,9 +1,6 @@
-# Déployez et monitorez votre modèle de scoring
+# API de scoring — MLOps 2
 
- L'objectif est de reprendre un modèle de scoring déjà entrainé, de l'exposer via une API conteneurisée et de suivre son comportement en production.
-
-> **État actuel :** ce dépôt est une base de travail. Le modèle, l'API, les tests, le conteneur et le monitoring restent à intégrer. `uv sync` permet de préparer l'environnement ; la commande de démarrage de l'API sera ajoutée quand elle existera.
-
+Ce dépôt expose une API FastAPI minimale avec `GET /health` et fournit une classe Python pour charger le modèle de scoring existant. Le modèle est chargé à la première prédiction; le démarrage de l’API ne le charge pas. Aucune route de prédiction n’est exposée.
 
 ## Roadmap
 
@@ -13,24 +10,37 @@
 - [ ] Étape 4 : Analysez et optimisez les performances du modèle.
 - [ ] Étape 5 : Réalisez la documentation.
 
-## Structure du projet
+## Prérequis
 
-```text
-.
-├── .venv                   # Dépendances du projets
-├── .gitignore              # Fichiers et dossiers ignorés par Git
-├── .python-version         # Version de Python utilisée : 3.14
-├── pyproject.toml          # Métadonnées et dépendances du projet
-├── README.md               # Présentation, roadmap et instructions
-└── uv.lock                 # Versions des dépendances résolues par uv
-```
+- Python 3.14 (version sélectionnée par `.python-version`)
+- [uv](https://docs.astral.sh/uv/)
 
-## Lancer le projet
+## Installer les dépendances
 
-Prérequis : avoir installé `uv`. Depuis la racine du dépôt, exécuter :
+Depuis la racine du dépôt :
 
-```bash
+```shell
 uv sync
 ```
 
-Cette commande prépare l'environnement virtuel `.venv` avec la version de Python et les dépendances définies par le projet. À ce stade, elle ne démarre aucune application : l'API n'est pas encore implémentée.
+## Lancer l’API
+
+```shell
+uv run uvicorn app:app --reload
+```
+
+La route de santé est disponible sur `http://127.0.0.1:8000/health` et renvoie `{"status":"ok"}`.
+
+## Lancer les tests
+
+```shell
+uv run pytest
+```
+
+Le rapport est disponible dans `tests/htmlcov/index.html` après l'exécution des tests.
+
+### Voir le rapport HTML de couverture
+
+```shell
+start .\tests\htmlcov\index.html
+```
