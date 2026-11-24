@@ -11,3 +11,8 @@ wheels/
 
 # JetBrain
 .idea
+
+# Test and coverage artifacts
+.pytest_cache/
+tests/.coverage
+tests/htmlcov/
