@@ -1,0 +1,35 @@
+# Nom du workflow
+name: CI
+
+# Déclencheurs : push sur master, develop et les branches feature/*
+on:
+  push:
+    branches: ["master", "develop", "feature/**"]
+
+jobs:
+  test:
+    name: Run tests
+    runs-on: ubuntu-latest
+
+    steps:
+      # Récupère le code du dépôt
+      - uses: actions/checkout@v4
+
+      # Installe uv et Python 3.14
+      - uses: astral-sh/setup-uv@v5
+        with:
+          python-version: "3.14"
+
+      # Résout le lockfile puis installe les dépendances du projet
+      - run: uv sync
+
+      # Exécute la suite de tests
+      - run: uv run pytest
+
+      # Conserve le rapport HTML de couverture comme artefact du workflow
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: coverage-report
+          path: tests/htmlcov/
+          if-no-files-found: ignore
